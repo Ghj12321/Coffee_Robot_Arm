@@ -18,6 +18,8 @@ unsigned int i;     //for문에 사용할 변수
 unsigned int val12 = 6400, val22 = 50, val32 = 0;  //입력할 변수값 스텝수, 회전속도 딜레이, 회전방향
 unsigned int ii;     //for문에 사용할 변수
 
+int gripperbutton = 2;
+
 void setup(){
   Serial.begin(9600);
   pinMode(steps, OUTPUT);
@@ -46,8 +48,7 @@ void loop()
 
     digitalWrite(dir, val3);      //회전방향 출력
     digitalWrite(dir2, val32);      //회전방향 출력2
-    //for(int a = 0; a < 30; a++)
-    {
+
       for(i=0; i<val1; i++)
       {          //정해진 스텝수만큼 펄스입력
         digitalWrite(steps, HIGH);
@@ -62,16 +63,19 @@ void loop()
       
       
      }
+    if (digitalRead(gripperbutton) == LOW)
+    {
+      for(int b = 0; b < 30; b++)
+        {
+          for(ii=0; ii<val12; ii++)
+          {          //정해진 스텝수만큼 펄스입력
+            digitalWrite(steps2, HIGH);
+            delayMicroseconds(val22);          //딜레이값
+            digitalWrite(steps2, LOW);
+            delayMicroseconds(val22);
+          }
+        }
     }
     
-    /*//for(int b = 0; b < 30; b++)
-    {
-      for(ii=0; ii<val12; ii++)
-      {          //정해진 스텝수만큼 펄스입력
-        digitalWrite(steps2, HIGH);
-        delayMicroseconds(val22);          //딜레이값
-        digitalWrite(steps2, LOW);
-        delayMicroseconds(val22);
-      }
-    }*/
- }
+    
+}
