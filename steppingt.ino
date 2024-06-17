@@ -43,11 +43,6 @@ void setup(){
 
 void loop()
 {
-  /*if(Serial.available())
-  {   //시리얼 입력이 있을경우
-    val1=Serial.parseInt();   //스텝수 입력
-    val2=Serial.parseInt();   //회전속도를 결정하는 딜레이값 입력(값이 작을수록 회전속도가 빨라짐)
-    val3=Serial.parseInt();   //회전방향을 결정하는 입력*/
 
     digitalWrite(dir, val3);      //회전방향 출력
     digitalWrite(dir2, val32);      //회전방향 출력2
