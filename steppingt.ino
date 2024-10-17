@@ -1,76 +1,152 @@
-#include <Stepper.h>
 #include <Servo.h>
+Servo Servo1;
+#define steps 5
+#define dir 6
+#define ms1 8
+#define ms2 9
+#define ms3 10      //핀연결
 
-#define STEPS1_PIN 5
-#define DIR1_PIN 6
-#define MS1_1_PIN 8
-#define MS2_1_PIN 9
-#define MS3_1_PIN 10
+#define steps2 23
+#define dir2 22
+#define ms12 24
+#define ms22 25
+#define ms32 26      //핀연결
 
-#define STEPS2_PIN 23
-#define DIR2_PIN 22
-#define MS1_2_PIN 24
-#define MS2_2_PIN 25
-#define MS3_2_PIN 26
+#define steps3 47
+#define dir3 46
+#define ms13 48
+#define ms23 49
+#define ms33 50      //핀연결
 
-#define GRIPPER_PIN 2
+int value1 = 70;
+int value2 = 170;
+int value3 = 90;
+int gripperbutton = 2;
 
-unsigned int steps1 = 6400;
-unsigned int speed1 = 50;
-unsigned int direction1 = 1;
+unsigned int val1 = 3200 , val2 = 100, val3 = 0;  //입력할 변수값 스텝수, 회전속도 딜레이, 회전방향
+unsigned int i;     //for문에 사용할 변수
 
-unsigned int steps2 = 6400;
-unsigned int speed2 = 50;
-unsigned int direction2 = 0;
+unsigned int val12 = 3200, val22 = 100, val32 = 0;  //입력할 변수값 스텝수, 회전속도 딜레이, 회전방향
+unsigned int ii;     //for문에 사용할 변수
 
-Servo gripper;
+unsigned int val13 = 3200 , val23 = 50, val33 = 0;  //입력할 변수값 스텝수, 회전속도 딜레이, 회전방향
+unsigned int iii; 
 
-void setup() {
+
+
+void setup(){
   Serial.begin(9600);
+  pinMode(steps, OUTPUT);
+  pinMode(dir, OUTPUT);
+  pinMode(ms1, OUTPUT);
+  pinMode(ms2, OUTPUT);
+  pinMode(ms3, OUTPUT);   //신호보낼 핀 출력설정
   
-  pinMode(STEPS1_PIN, OUTPUT);
-  pinMode(DIR1_PIN, OUTPUT);
-  pinMode(MS1_1_PIN, OUTPUT);
-  pinMode(MS2_1_PIN, OUTPUT);
-  pinMode(MS3_1_PIN, OUTPUT);
-  
-  digitalWrite(MS1_1_PIN, HIGH);
-  digitalWrite(MS2_1_PIN, HIGH);
-  digitalWrite(MS3_1_PIN, HIGH);
+  digitalWrite(ms1, HIGH);
+  digitalWrite(ms2, HIGH);
+  digitalWrite(ms3, HIGH);    //분주설정
 
-  pinMode(STEPS2_PIN, OUTPUT);
-  pinMode(DIR2_PIN, OUTPUT);
-  pinMode(MS1_2_PIN, OUTPUT);
-  pinMode(MS2_2_PIN, OUTPUT);
-  pinMode(MS3_2_PIN, OUTPUT);
+  pinMode(steps2, OUTPUT);
+  pinMode(dir2, OUTPUT);
+  pinMode(ms12, OUTPUT);
+  pinMode(ms22, OUTPUT);
+  pinMode(ms32, OUTPUT);   //신호보낼 핀 출력설정
   
-  digitalWrite(MS1_2_PIN, HIGH);
-  digitalWrite(MS2_2_PIN, HIGH);
-  digitalWrite(MS3_2_PIN, HIGH);
+  digitalWrite(ms12, HIGH);
+  digitalWrite(ms22, HIGH);
+  digitalWrite(ms32, HIGH);    //분주설정
 
-  gripper.attach(GRIPPER_PIN);
+  pinMode(steps3, OUTPUT);
+  pinMode(dir3, OUTPUT);
+  pinMode(ms13, OUTPUT);
+  pinMode(ms23, OUTPUT);
+  pinMode(ms33, OUTPUT);   //신호보낼 핀 출력설정
+  
+  digitalWrite(ms13, HIGH);
+  digitalWrite(ms23, HIGH);
+  digitalWrite(ms33, HIGH);    //분주설정
+  Servo1.attach(3);
+  pinMode(gripperbutton, INPUT_PULLUP);
+
 }
 
-void loop() {
-  gripper.write(0); // Adjust angle as needed to close the gripper
-  delay(1000); // Wait for gripper to close
+void loop()
+{
+  /*if(Serial.available())
+  {   //시리얼 입력이 있을경우
+    val1=Serial.parseInt();   //스텝수 입력
+    val2=Serial.parseInt();   //회전속도를 결정하는 딜레이값 입력(값이 작을수록 회전속도가 빨라짐)
+    val3=Serial.parseInt();   //회전방향을 결정하는 입력*/
 
-  moveMotor(STEPS1_PIN, DIR1_PIN, steps1, speed1, direction1);
-  moveMotor(STEPS2_PIN, DIR2_PIN, steps2, speed2, direction2);
+    digitalWrite(dir, val3);      //회전방향 출력
+    digitalWrite(dir2, val32);      //회전방향 출력2
+    digitalWrite(dir3, val33);      //회전방향 출력2
+    if (digitalRead(gripperbutton) == LOW)
+    {
 
-  gripper.write(90); // Adjust angle as needed to open the gripper
-  delay(1000); // Wait for gripper to open
+     for(int a = 0; a < 5; a++)
+      {
+     for(i=0; i<val1; i++)
+       {          //정해진 스텝수만큼 펄스입력
+         digitalWrite(steps, HIGH);
+         delayMicroseconds(val2);          //딜레이값
+         digitalWrite(steps, LOW);
+         delayMicroseconds(val2);
+       }
+      }
+          for(int b = 0; b < 5; b++)
+          {
+           for(ii=0; ii<val12; ii++)
+            {          //정해진 스텝수만큼 펄스입력
+             digitalWrite(steps2, HIGH);
+             delayMicroseconds(val22);          //딜레이값
+             digitalWrite(steps2, LOW);
+             delayMicroseconds(val22);
+            }
+          }
+            for(int c = 0; c < 10; c++)
+          {
+             for(iii=0; iii<val13; iii++)
+           {          //정해진 스텝수만큼 펄스입력
+            digitalWrite(steps3, HIGH);
+            delayMicroseconds(val23);          //딜레이값
+            digitalWrite(steps3, LOW);
+            delayMicroseconds(val23);
+            }
+           }
 
-  moveMotor(STEPS1_PIN, DIR1_PIN, steps1, speed1, !direction1);
-  moveMotor(STEPS2_PIN, DIR2_PIN, steps2, speed2, !direction2);
+      Servo1.write(value1);
+      delay(1000);
+      Servo1.write(value3);
+       }
 }
+     /*  for(int b = 0; b < 10; b++)
+    {
+      for(ii=0; ii<val12; ii++)
+      {          //정해진 스텝수만큼 펄스입력
+        digitalWrite(steps2, HIGH);
+        delayMicroseconds(val22);          //딜레이값
+        digitalWrite(steps2, LOW);
+        delayMicroseconds(val22);
+      }
+     }*/
 
-void moveMotor(int stepsPin, int dirPin, unsigned int steps, unsigned int speed, unsigned int direction) {
-  digitalWrite(dirPin, direction);
-  for (unsigned int i = 0; i < steps; i++) {
-    digitalWrite(stepsPin, HIGH);
-    delayMicroseconds(speed);
-    digitalWrite(stepsPin, LOW);
-    delayMicroseconds(speed);
-  }
-}
+     /*for(int c = 0; c < 30; c++)
+    {
+      for(iii=0; iii<val13; iii++)
+      {          //정해진 스텝수만큼 펄스입력
+        digitalWrite(steps3, HIGH);
+        delayMicroseconds(val23);          //딜레이값
+        digitalWrite(steps3, LOW);
+        delayMicroseconds(val23);
+      }
+     }
+      pinMode(40,OUTPUT);
+      pinMode(41,OUTPUT);
+      delay(2000);
+      
+      Servo1.write(value1);
+      delay(1000);
+      Servo1.write(value3);
+    
+    */
